@@ -17,6 +17,7 @@
 
 <script>
 import ProgressBar from "progressbar.js";
+import beep from "../assets/beep.mp3";
 
 export default {
   name: "Home",
@@ -30,6 +31,7 @@ export default {
       buttonText: "Start!",
       timeP: null,
       interval: null,
+      beepAudio: new Audio(beep),
     };
   },
   mounted: function () {
@@ -67,6 +69,10 @@ export default {
       if (this.currentTimeInSeconds <= 0) {
         // Clear interval
         clearInterval(this.interval);
+
+        // Play audio
+        this.beepAudio.play();
+
         this.startRest();
       }
     },
