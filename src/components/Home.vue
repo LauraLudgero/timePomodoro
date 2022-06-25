@@ -28,7 +28,7 @@ export default {
 
     return {
       pomodoroDuration,
-      restDuration: 25 * 60,
+      restDuration: 5 * 60,
       currentTimeInSeconds: pomodoroDuration,
       currentSegment: 1,
       buttonText: "Inciar",
