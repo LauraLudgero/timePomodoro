@@ -1,5 +1,22 @@
 # time_pomodoro
 
+## Desafio Jera
+
+## Participante
+```
+Laura Ludgero
+```
+
+## Pré-requisitos
+```
+Instalar o NodeJS.
+Instalar o vue-cli.
+```
+## Instalação
+```
+Clone o projeto:
+
+```
 ## Project setup
 ```
 npm install
