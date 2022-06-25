@@ -10,7 +10,8 @@
       <div class="time-display">
         <h2>{{ timeDisplay }}</h2>
       </div>
-      <button  @click="handleTimer" :disabled="resting">{{ buttonText }}</button>
+    <button v-if="no" @click="button1">{{ buttonText }}</button><p v-if="no">Sem Descaso</p>
+    <button v-if="yes" @click="button2">{{ buttonText }}</button><p v-if="yes">Com Descaso</p>  
     </div>
   </div>
 </template>
@@ -34,7 +35,9 @@ export default {
       interval: null,
       beepAudio: new Audio(beep),
       resting: false,
-      no: true,
+            no: true,
+      yes: true,
+      test: null,
     };
   },
   mounted: function () {
@@ -44,6 +47,18 @@ export default {
     ); //add um segundo e e converte para milis
   },
   methods: {
+        button1() {
+      this.yes = false;
+      this.test = 1;
+
+      this.handleTimer();
+    },
+    button2() {
+      this.no = false;
+      this.test = 2;
+
+      this.handleTimer();
+    },
     handleTimer() {
       if (this.buttonText === "Inciar" || this.buttonText === "Continuar") {
         this.animateBar();
@@ -76,18 +91,22 @@ export default {
         // Play audio
         this.beepAudio.play();
 
-        // Immediately disable button and set state
-        this.no = false;
-        this.resting = true;
-        this.buttonText = "Descanso";
+        
+        if (this.test == 2) {
+          // Immediately disable button and set state
+          this.resting = true;
+          this.buttonText = "Rest";
 
-        setTimeout(() => {
-          // Change time to reflect rest duration
-          this.currentTimeInSeconds = this.restDuration;
+          setTimeout(() => {
+            // Change time to reflect rest duration
+            this.currentTimeInSeconds = this.restDuration;
 
-          // Start rest after beep ends
-          this.startRest();
-        }, 4200);
+            // Start rest after beep ends
+            this.startRest();
+          }, 4200);
+        } else {
+          this.start();
+        }
       }
     },
     reduceTime() {
@@ -96,6 +115,18 @@ export default {
           this.currentTimeInSeconds -= 1;
         }
       }, 1000);
+    },
+        start() {
+      // Set new interval
+      this.reduceTime();
+      setTimeout(() => {
+        clearInterval(this.interval);
+        this.beepAudio.play();
+        this.currentTimeInSeconds = this.pomodoroDuration;
+        this.buttonText = "Inciar";
+        this.resting = false;
+        this.yes = true;
+      }, );
     },
     startRest() {
       // Set new interval
@@ -106,7 +137,10 @@ export default {
         this.currentTimeInSeconds = this.pomodoroDuration;
         this.buttonText = "Inciar";
         this.resting = false;
-      }, this.restDuration * 1000);
+        this.no = true;
+      },
+       this.restDuration * 1000
+       );
     },
   },
   computed: {
@@ -146,7 +180,7 @@ h2 {
 }
 
 p{
-  font-size: 48px;
+  font-size: 30px;
   line-height: 48px;
   text-align: center;
   color: #fff;
@@ -155,7 +189,7 @@ p{
 button {
   background: #ef2b2b;
   color: #fff;
-  margin-top: 90px;
+  margin-top: 20px;
   width: 150px;
   height: 55px;
   border-radius: 10px;
@@ -163,5 +197,7 @@ button {
   cursor: pointer;
   font-size: 30px;
   text-align: center;
+  flex: 10px;
+  display: inline-block;
 }
 </style>
