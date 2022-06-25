@@ -6,12 +6,13 @@
     <img id="container__img" src="../assets/tomate.png" alt="" />
     <div class="container__timer">
       <path id="time" />
-
-      <div class="time-display">
+      <div>
         <h2>{{ timeDisplay }}</h2>
       </div>
-    <button v-if="no" @click="button1">{{ buttonText }}</button><p v-if="no">Sem Descaso</p>
-    <button v-if="yes" @click="button2">{{ buttonText }}</button><p v-if="yes">Com Descaso</p>  
+      <button v-if="no" @click="button1">{{ buttonText }}</button>
+      <p v-if="no">Sem Descaso</p>
+      <button v-if="yes" @click="button2">{{ buttonText }}</button>
+      <p v-if="yes">Com Descaso</p>
     </div>
   </div>
 </template>
@@ -23,11 +24,11 @@ import beep from "../assets/beep.mp3";
 export default {
   name: "Home",
   data: () => {
-    const pomodoroDuration = 0.1 * 60; // Cronomrtro 25 mim
+    const pomodoroDuration = 25 * 60; // Cronomrtro 25 mim
 
     return {
       pomodoroDuration,
-      restDuration: 0.1 * 60,
+      restDuration: 25 * 60,
       currentTimeInSeconds: pomodoroDuration,
       currentSegment: 1,
       buttonText: "Inciar",
@@ -35,7 +36,7 @@ export default {
       interval: null,
       beepAudio: new Audio(beep),
       resting: false,
-            no: true,
+      no: true,
       yes: true,
       test: null,
     };
@@ -47,7 +48,7 @@ export default {
     ); //add um segundo e e converte para milis
   },
   methods: {
-        button1() {
+    button1() {
       this.yes = false;
       this.test = 1;
 
@@ -71,7 +72,7 @@ export default {
     animateBar() {
       this.reduceTime();
       let segment = this.timeP;
-      
+
       segment.animate(
         0,
         {
@@ -91,7 +92,6 @@ export default {
         // Play audio
         this.beepAudio.play();
 
-        
         if (this.test == 2) {
           // Immediately disable button and set state
           this.resting = true;
@@ -116,7 +116,7 @@ export default {
         }
       }, 1000);
     },
-        start() {
+    start() {
       // Set new interval
       this.reduceTime();
       setTimeout(() => {
@@ -126,7 +126,7 @@ export default {
         this.buttonText = "Inciar";
         this.resting = false;
         this.yes = true;
-      }, );
+      });
     },
     startRest() {
       // Set new interval
@@ -138,9 +138,7 @@ export default {
         this.buttonText = "Inciar";
         this.resting = false;
         this.no = true;
-      },
-       this.restDuration * 1000
-       );
+      }, this.restDuration * 1000);
     },
   },
   computed: {
@@ -179,7 +177,7 @@ h2 {
   text-align: center;
 }
 
-p{
+p {
   font-size: 30px;
   line-height: 48px;
   text-align: center;
