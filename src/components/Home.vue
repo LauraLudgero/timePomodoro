@@ -10,7 +10,7 @@
       <div class="time-display">
         <h2>{{ timeDisplay }}</h2>
       </div>
-      <button @click="handleTimer">{{ buttonText }}</button>
+      <button  @click="handleTimer" :disabled="resting">{{ buttonText }}</button>
     </div>
   </div>
 </template>
@@ -28,10 +28,13 @@ export default {
       pomodoroDuration,
       restDuration: 0.1 * 60,
       currentTimeInSeconds: pomodoroDuration,
-      buttonText: "Start!",
+      currentSegment: 1,
+      buttonText: "Inciar",
       timeP: null,
       interval: null,
       beepAudio: new Audio(beep),
+      resting: false,
+      no: true,
     };
   },
   mounted: function () {
@@ -42,18 +45,18 @@ export default {
   },
   methods: {
     handleTimer() {
-      if (this.buttonText === "Start!" || this.buttonText === "Resume") {
+      if (this.buttonText === "Inciar" || this.buttonText === "Continuar") {
         this.animateBar();
-        this.buttonText = "Pause";
-      } else if (this.buttonText === "Pause") {
+        this.buttonText = "Pausar";
+      } else if (this.buttonText === "Pausar") {
         this.pauseBar();
-        this.buttonText = "Resume";
+        this.buttonText = "Continuar";
       }
     },
     animateBar() {
       this.reduceTime();
       let segment = this.timeP;
-
+      
       segment.animate(
         0,
         {
@@ -73,7 +76,18 @@ export default {
         // Play audio
         this.beepAudio.play();
 
-        this.startRest();
+        // Immediately disable button and set state
+        this.no = false;
+        this.resting = true;
+        this.buttonText = "Descanso";
+
+        setTimeout(() => {
+          // Change time to reflect rest duration
+          this.currentTimeInSeconds = this.restDuration;
+
+          // Start rest after beep ends
+          this.startRest();
+        }, 4200);
       }
     },
     reduceTime() {
@@ -88,9 +102,11 @@ export default {
       this.reduceTime();
       setTimeout(() => {
         clearInterval(this.interval);
+        this.beepAudio.play();
         this.currentTimeInSeconds = this.pomodoroDuration;
-        this.buttonText = "Start!";
-      });
+        this.buttonText = "Inciar";
+        this.resting = false;
+      }, this.restDuration * 1000);
     },
   },
   computed: {
@@ -127,6 +143,13 @@ h2 {
   margin-top: 70px;
   color: #fff;
   text-align: center;
+}
+
+p{
+  font-size: 48px;
+  line-height: 48px;
+  text-align: center;
+  color: #fff;
 }
 
 button {
