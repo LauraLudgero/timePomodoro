@@ -12,7 +12,7 @@
       <button v-if="no" @click="button1">{{ buttonText }}</button>
       <p v-if="no">Sem Descaso</p>
       <button v-if="yes" @click="button2">{{ buttonText }}</button>
-      <p v-if="yes">Com Descaso</p>
+      <div v-if="rest"><p v-if="yes">Com Descaso</p></div>
     </div>
   </div>
 </template>
@@ -24,11 +24,11 @@ import beep from "../assets/beep.mp3";
 export default {
   name: "Home",
   data: () => {
-    const pomodoroDuration = 25 * 60; // Cronomrtro 25 mim
+    const pomodoroDuration = 0.1 * 60; // Cronomrtro 25 mim
 
     return {
       pomodoroDuration,
-      restDuration: 5 * 60,
+      restDuration: 0.1 * 60,
       currentTimeInSeconds: pomodoroDuration,
       currentSegment: 1,
       buttonText: "Inciar",
@@ -39,6 +39,7 @@ export default {
       no: true,
       yes: true,
       test: null,
+      rest: true,
     };
   },
   mounted: function () {
@@ -95,7 +96,8 @@ export default {
         if (this.test == 2) {
           // Immediately disable button and set state
           this.resting = true;
-          this.buttonText = "Rest";
+          this.buttonText = "Descanso";
+          this.rest = false;
 
           setTimeout(() => {
             // Change time to reflect rest duration
@@ -138,6 +140,7 @@ export default {
         this.buttonText = "Inciar";
         this.resting = false;
         this.no = true;
+        this.rest = true;
       }, this.restDuration * 1000);
     },
   },
