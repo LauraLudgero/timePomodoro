@@ -15,7 +15,7 @@ Instalar o vue-cli.
 ## Instalação
 ```
 Clone o projeto:
-
+https://github.com/LauraLudgero/timePomodoro.git
 ```
 ## Project setup
 ```
